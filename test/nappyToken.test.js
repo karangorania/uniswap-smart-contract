@@ -1,19 +1,21 @@
-const { expect } = require("chai");
-const { ethers } = require("hardhat");
+const { expect } = require('chai');
+const { BigNumber } = require('ethers');
+const { ethers } = require('hardhat');
 
-describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
+describe('NappyToken', function () {
+  it('Should return the correct symbol', async function () {
+    const NappyToken = await ethers.getContractFactory('NappyToken');
+    const nappyToken = await NappyToken.deploy();
+    await nappyToken.deployed();
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
+    expect(await nappyToken.symbol()).to.equal('NPY');
+  });
 
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
+  it('Should return the correct name', async function () {
+    const NappyToken = await ethers.getContractFactory('NappyToken');
+    const nappyToken = await NappyToken.deploy();
+    await nappyToken.deployed();
 
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
-
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
+    expect(await nappyToken.name()).to.equal('NappyToken');
   });
 });
