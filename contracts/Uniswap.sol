@@ -44,14 +44,9 @@ contract UniswapV2 {
             path[0] = address(NappyToken);
             path[1] = WETH;
             // } else {
-            // path = new address[](3);
-            // path[0] = NappyToken;
-            // path[1] = WETH;
-            // path[2] = _tokenOut;
-            // }
         // swapExactTokensForTokens(_amountIn, _amountOutMin, path, _to, block.timestamp);
         // function swapExactTokensForETH(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
-       (uint256[] memory amounts) = Router.swapExactTokensForTokens(_tokenAmount, 2, path, address(this), block.timestamp + 7777);
+       (uint256[] memory amounts) = Router.swapExactTokensForETH(_tokenAmount, 2, path, address(this), block.timestamp + 7777);
        ETHStored[msg.sender] += amounts[1];
         // tokenAddress.(_tokenIn).transferFrom(msg.sender, address(this), _amountIn);
      }
