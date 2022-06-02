@@ -32,17 +32,66 @@ describe('Uniswap', () => {
   });
 
   it('Should approve the uniswap contract', async () => {
-    await nappyToken.approve(
-      uniswapAddress,
-      ethers.utils.parseUnits('10000000000', 18)
-    );
+    await nappyToken
+      .connect(addr1)
+      .approve(uniswapAddress, ethers.utils.parseUnits('10000000000', 18));
   });
 
   it('Should transfer the token to uniswap contract', async () => {
     await nappyToken.mint(addr1.address, 10000000000);
-    await nappyToken.transfer(
-      uniswapAddress,
-      ethers.utils.parseUnits('10000000000', 18)
-    );
+    await nappyToken
+      .connect(addr1)
+      .approve(uniswapAddress, ethers.utils.parseUnits('10000000000', 18));
+    await nappyToken
+      .connect(addr1)
+      .transfer(uniswapAddress, ethers.utils.parseUnits('10000000000', 18));
+  });
+
+  it('Should add liquidity', async function () {
+    await nappyToken.mint(addr1.address, 10000000000);
+    await nappyToken
+      .connect(addr1)
+      .approve(uniswapAddress, ethers.utils.parseUnits('10000000000', 18));
+    await uniswap
+      .connect(addr1)
+      .addLiquidity(ethers.utils.parseUnits('10000000000', 18), {
+        value: ethers.utils.parseEther('2'),
+      });
+  });
+
+  it('Should swap token for ETH ', async () => {
+    await nappyToken.mint(addr1.address, 100000000000000);
+    await nappyToken
+      .connect(addr1)
+      .approve(uniswapAddress, ethers.utils.parseUnits('100000000000000', 18));
+    await uniswap
+      .connect(addr1)
+      .addLiquidity(ethers.utils.parseUnits('10000000000', 18), {
+        value: ethers.utils.parseEther('2'),
+      });
+    await uniswap
+      .connect(addr1)
+      .swapTokensForETH(ethers.utils.parseUnits('1000', 18));
+  });
+
+  it('Should add liquidity', async function () {
+    await nappyToken.mint(addr1.address, 100000000000000);
+    await nappyToken
+      .connect(addr1)
+      .approve(uniswapAddress, ethers.utils.parseUnits('100000000000000', 18));
+    await uniswap
+      .connect(addr1)
+      .addLiquidity(ethers.utils.parseUnits('10000000000', 18), {
+        value: ethers.utils.parseEther('2'),
+      });
+    await uniswap
+      .connect(addr1)
+      .swapTokensForETH(ethers.utils.parseUnits('1000', 18));
+
+    const amountBefore = await uniswap.ETHStored(addr1.address);
+    await uniswap.connect(addr1).withdrawETH(amountBefore);
+
+    const amountAfter = await uniswap.ETHStored(addr1.address);
+    expect(amountBefore).to.be.not.equal(amountAfter);
   });
 });
