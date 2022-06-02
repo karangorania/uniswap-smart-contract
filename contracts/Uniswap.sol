@@ -5,7 +5,12 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 
-contract UniswapV2 {
+/// @title Uniswap Smart Contract 
+/// @author Karan J Goraniya
+/// @notice You can use this contract for only the most basic simulation
+/// @dev All function calls are currently implemented without side effects
+
+contract Uniswap {
 
     address public tokenAddress;
     IERC20 NappyToken;
@@ -16,62 +21,60 @@ contract UniswapV2 {
 
     mapping(address => uint256)public ETHStored;
 
-    event AddLiquidity(address indexed, uint256 amount);
+    event AddLiquidity(address indexed, uint256 amount, address indexed);
+    event SwapTokens(address indexed, uint256 amount);
+    event Withdraw(address indexed, uint256 amount);
+
 
     constructor(address _token){
         require(_token != address(0), "bilkul galat hai nai chalega");
         tokenAddress = _token;
-        NappyToken = IERC20(_token);
-        
+        NappyToken = IERC20(_token); 
     }
 
+    // important to receive ETH
+    receive() external payable {}
 
-    function addLiquidity(uint256 _tokenAmount) external payable{
-        // require(msg.sender == NappyToken, 'UniswapV2: FORBIDDEN');
+    // @notice It will add liquidity & create the pool
+    // @dev We will use Router to add liquidity and create pool.
+    // @param _tokenAmount The number token you want to deposit in pool.
+    // @return Age in years, rounded up for partial years
+
+    function addLiquidity(uint256 _tokenAmount) external payable {
         require(msg.value >= 1 ether, 'not enough balance');
         NappyToken.transferFrom(msg.sender, address(this), _tokenAmount);
         NappyToken.approve(ROUTER, _tokenAmount);
         Router.addLiquidityETH{value: msg.value}(tokenAddress, _tokenAmount, 1000, msg.value, msg.sender, block.timestamp + 666);
+
+        emit AddLiquidity(msg.sender, _tokenAmount, address(this) );
     }
 
-    function swapExactTokensForETH(uint256 _tokenAmount) external {
+    // @notice It will your token into ETH
+    // @dev We will use Router to swap the token.
+    // @param  _tokenAmount The number token you want swap.
+    // @return Age in years, rounded up for partial years
+
+    function swapTokensForETH(uint256 _tokenAmount) external {
           NappyToken.transferFrom(msg.sender, address(this), _tokenAmount);
           NappyToken.approve(ROUTER, _tokenAmount);
 
-            // if (_tokenAmount == WETH || _tokenOut == WETH) {
-            // if (_tokenAmount == WETH) {
           address[] memory path = new address[](2);
             path[0] = address(NappyToken);
             path[1] = WETH;
-            // } else {
-        // swapExactTokensForTokens(_amountIn, _amountOutMin, path, _to, block.timestamp);
-        // function swapExactTokensForETH(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
        (uint256[] memory amounts) = Router.swapExactTokensForETH(_tokenAmount, 2, path, address(this), block.timestamp + 7777);
        ETHStored[msg.sender] += amounts[1];
-        // tokenAddress.(_tokenIn).transferFrom(msg.sender, address(this), _amountIn);
+       emit SwapTokens(msg.sender, _tokenAmount);
      }
 
-    function removeLiquidity(uint256 _tokenAmount) external {
-        // address pair = IUniswapV2
-        // NappyToken.transferFrom(msg.sender, address(this), _tokenAmount);
-        // NappyToken.approve(ROUTER, _tokenAmount);
-        Router.removeLiquidityETH(
-           
-            tokenAddress,
-            _tokenAmount,
-            2,
-            2,
-            msg.sender,
-            block.timestamp + 7777
-        );
+    // @notice It will use to withdraw your ETH.
+    // @dev It will wtihdraw all your ETH which is swap.
+    // @param  _amount the number of ETH you want to withdraw.
 
-    } 
-
-    function withdraw(uint256 _amount)external {
+    function withdrawETH(uint256 _amount) external {
         require(ETHStored[msg.sender] >= _amount, 'kuch nai hai chalaja');
-        // uint256 amount = ETHStored[msg.sender];
         ETHStored[msg.sender] -= _amount;
         payable(msg.sender).transfer(_amount);
-        // emit
+
+        emit Withdraw(msg.sender, _amount);
     }
 }
