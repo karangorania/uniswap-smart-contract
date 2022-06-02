@@ -35,10 +35,9 @@ contract Uniswap {
     // important to receive ETH
     receive() external payable {}
 
-    // @notice It will add liquidity & create the pool
-    // @dev We will use Router to add liquidity and create pool.
-    // @param _tokenAmount The number token you want to deposit in pool.
-    // @return Age in years, rounded up for partial years
+    /// @notice It will add liquidity & create the pool
+    /// @dev We will use Router to add liquidity and create pool.
+    /// @param _tokenAmount The number token you want to deposit in pool.
 
     function addLiquidity(uint256 _tokenAmount) external payable {
         require(msg.value >= 1 ether, 'not enough balance');
@@ -49,10 +48,9 @@ contract Uniswap {
         emit AddLiquidity(msg.sender, _tokenAmount, address(this) );
     }
 
-    // @notice It will your token into ETH
-    // @dev We will use Router to swap the token.
-    // @param  _tokenAmount The number token you want swap.
-    // @return Age in years, rounded up for partial years
+    /// @notice It will your token into ETH
+    /// @dev We will use Router to swap the token.
+    /// @param  _tokenAmount The number token you want swap.
 
     function swapTokensForETH(uint256 _tokenAmount) external {
           NappyToken.transferFrom(msg.sender, address(this), _tokenAmount);
@@ -66,9 +64,9 @@ contract Uniswap {
        emit SwapTokens(msg.sender, _tokenAmount);
      }
 
-    // @notice It will use to withdraw your ETH.
-    // @dev It will wtihdraw all your ETH which is swap.
-    // @param  _amount the number of ETH you want to withdraw.
+    /// @notice It will use to withdraw your ETH.
+    /// @dev It will wtihdraw all your ETH which is swap.
+    /// @param  _amount the number of ETH you want to withdraw.
 
     function withdrawETH(uint256 _amount) external {
         require(ETHStored[msg.sender] >= _amount, 'kuch nai hai chalaja');
