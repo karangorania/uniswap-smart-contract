@@ -13,7 +13,7 @@ async function main() {
 
   await uniswap.deployed();
 
-  console.log('NappyToken deployed to:', uniswap.address);
+  console.log('Uniswap Token deployed to:', uniswap.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
