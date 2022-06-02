@@ -101,7 +101,17 @@ Help
   npx hardhat help
 ```
 
-## Check on Rinkeby Explorer
+# Check on Rinkeby Explorer
 
-- [NappyToken](https://ropsten.etherscan.io/address/0xd50AAC05b95bcFFB658265dA522bdbA94D1Fd1E3)
-- [Uniswap](https://ropsten.etherscan.io/address/0xe733d6D6FE687665257cfF03E31CB54BD67e2367)
+## Deploy Contract
+
+- [NappyToken](https://rinkeby.etherscan.io/address/0x85d6b09a1764d52252460f7f0a4f3a32740115f0)
+- [Uniswap](https://rinkeby.etherscan.io/address/0x6c78d339e00cb221b9B493aF45cfdC66924D9844)
+
+# Transaction
+
+## Add Liquidity
+
+- [Add Liquidity](https://rinkeby.etherscan.io/tx/0x33e8f6ad84cc707e2e4115e916bc184bce4b16f5aac74cbc7a1878917b0be69b)
+- [Swap](https://rinkeby.etherscan.io/tx/0x9a74ed143e30d39afa2ae9119f4151a0ecfe5cc57966e9d44bb5307945bc5e49)
+- [WithdrawETH](https://rinkeby.etherscan.io/tx/0xf1d301290453563dda4bd930f3317a26b9dd8f4e148b10ed7e0676fcc23d7f3e)
