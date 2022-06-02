@@ -11,6 +11,11 @@ module.exports = {
       url: RINKEBY_API_URL,
       accounts: [`0x${PRIVATE_KEY}`],
     },
+    hardhat: {
+      forking: {
+        url: process.env.RINKEBY_API_URL,
+      },
+    },
   },
   etherscan: {
     apiKey: ETHERSCAN_KEY,
